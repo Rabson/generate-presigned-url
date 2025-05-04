@@ -1,0 +1,45 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+
+# Pulumi
+.Pulumi/
+# pulumi.*
+*.bak
+*.tmp
+*.json.backup
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.*
+
+# Logs
+logs/
+*.log
+
+# Compiled lambda files (if using TypeScript)
+dist/
+build/
+
+# IDEs
+.vscode/
+.idea/
+
+# CI/CD
+.github/*-secret.yml
+
+# Coverage/test reports
+coverage/
+.nyc_output/
+
+# Optional: Terraform/Python support (if mixing infra tools)
+*.tfstate*
+__pycache__/
+*.pyc

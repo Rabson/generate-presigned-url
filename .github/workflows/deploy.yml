@@ -1,0 +1,57 @@
+name: Pulumi Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Setup Pulumi CLI
+        uses: pulumi/actions@v4
+        with:
+          pulumi-version: latest
+
+      - name: Determine Stack
+        id: stack
+        run: |
+          if [[ "${GITHUB_REF##*/}" == "main" ]]; then
+            echo "stack=prod" >> $GITHUB_OUTPUT
+          elif [[ "${GITHUB_REF##*/}" == "staging" ]]; then
+            echo "stack=staging" >> $GITHUB_OUTPUT
+          else
+            echo "stack=dev" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Pulumi Login
+        run: pulumi login
+
+      - name: Select Pulumi Stack
+        run: pulumi stack select ${{ steps.stack.outputs.stack }}
+
+      - name: Preview Pulumi Changes
+        run: pulumi preview --stack ${{ steps.stack.outputs.stack }}
+
+      - name: Deploy Infrastructure
+        run: pulumi up --yes --stack ${{ steps.stack.outputs.stack }}

@@ -1,0 +1,17 @@
+{
+    "name": "generate-presigned-url",
+    "main": "index.ts",
+    "devDependencies": {
+        "@types/node": "^18",
+        "typescript": "^5.0.0"
+    },
+    "dependencies": {
+        "@pulumi/aws": "^6.0.0",
+        "@pulumi/awsx": "^2.0.2",
+        "@pulumi/pulumi": "^3.113.0",
+        "aws-sdk": "^2.1692.0",
+        "esbuild": "^0.19.0",
+        "mime": "^4.0.7",
+        "uuid": "^9.0.0"
+    }
+}
